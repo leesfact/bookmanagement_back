@@ -32,7 +32,7 @@ public class ValidationAop {
 	
 	for(Object arg : args) {
 		if(arg.getClass() == BeanPropertyBindingResult.class) {
-			bindingResult = (BeanPropertyBindingResult)arg;
+			bindingResult = (BeanPropertyBindingResult) arg;
 		}
 	}
 	

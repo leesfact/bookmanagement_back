@@ -3,6 +3,10 @@ package com.toyproject.bookmanagement.dto.auth;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
+import com.toyproject.bookmanagement.entity.User;
+
 import lombok.Data;
 
 @Data
@@ -16,4 +20,14 @@ public class SignupReqDto {
 	@Pattern(regexp = "^[가-힣]{2,7}$",
 			message = "한글이름만 작성 가능합니다.")
 	private String name;
+	
+	
+	public User toEntity() {
+		
+		 return User.builder()
+				.email(email)
+				.password(new BCryptPasswordEncoder().encode(password))
+				.name(name)
+				.build();
+	}
 }
