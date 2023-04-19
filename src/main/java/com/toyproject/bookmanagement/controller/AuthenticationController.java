@@ -17,7 +17,7 @@ import com.toyproject.bookmanagement.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/auth")
+@RequestMapping("/auth") 
 @RequiredArgsConstructor
 public class AuthenticationController {
 	
