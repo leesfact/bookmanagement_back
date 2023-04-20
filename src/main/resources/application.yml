@@ -4,10 +4,10 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://localhost:3306/book_management
     username: root
-    password: 1q2w3e4r5t
+    password: root
     
 mybatis:
   mapper-locations:
     - /mappers/*.xml    
 jwt:
-  secret:uAdzVUhnjML7pCLQLDapBdNacinrqdRjbaqLD7sMUfe0ILk8KKqk5Xb0WncSuIre   
+  secret:  uAdzVUhnjML7pCLQLDapBdNacinrqdRjbaqLD7sMUfe0ILk8KKqk5Xb0WncSuIre   
