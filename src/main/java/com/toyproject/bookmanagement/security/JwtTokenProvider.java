@@ -1,25 +1,15 @@
 package com.toyproject.bookmanagement.security;
 
 import java.security.Key;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 
 import com.toyproject.bookmanagement.dto.auth.JwtRespDto;
-import com.toyproject.bookmanagement.entity.Authority;
-import com.toyproject.bookmanagement.exception.CustomException;
 
-import lombok.extern.slf4j.Slf4j;
-import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
@@ -28,6 +18,7 @@ import io.jsonwebtoken.UnsupportedJwtException;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import io.jsonwebtoken.security.SecurityException;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Component
@@ -76,6 +67,7 @@ public class JwtTokenProvider {
 			.parseClaimsJws(token);
 			
 			return true;
+			
 		}catch(SecurityException | MalformedJwtException e) {
 			// Security 라이브러리에 오유가 있거나, JSON의 포맷이 잘못된 형식의 JWT가 들어왔을 때 예외
 			// SignatureException이 포함되어 있음
@@ -95,38 +87,52 @@ public class JwtTokenProvider {
 		return false;
 	}
 	
-	public Authentication getAuthentication(String accessToken) {
-		
-		Claims claims = parseClaims(accessToken);
-		
-		Object roles = claims.get("auth");
-		
-		if(roles == null) {
-			throw new CustomException("권한 정보가 없는 토큰입니다.");
+	
+	public String getToken(String token) {
+		String type = "Bearer";
+		if(StringUtils.hasText(token) && token.startsWith(type)) {
+			return token.substring(type.length()+1);
 		}
-		
-		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-		String[] rolesArray = roles.toString().split(",");
-		Arrays.asList(rolesArray).forEach(role -> {
-			
-			authorities.add(new SimpleGrantedAuthority(role));
-		});
-		
-		UserDetails userDetails = new User(claims.getSubject(),"",authorities);
-		
-		return new UsernamePasswordAuthenticationToken(userDetails,"",authorities);
+		return null;
 	}
 	
-	private Claims parseClaims(String accessToken) {
-		try {
-			return Jwts.parserBuilder()
-					.setSigningKey(key)
-					.build()
-					.parseClaimsJws(accessToken)
-					.getBody();
-		}catch (ExpiredJwtException e) {
-			return e.getClaims();
-		}
-		
-	}
+	
+	
+	
+//	public Authentication getAuthentication(String accessToken) {
+//		
+//		Claims claims = parseClaims(accessToken);
+//		
+//		Object roles = claims.get("auth");
+//		
+//		if(roles == null) {
+//			throw new CustomException("권한 정보가 없는 토큰입니다.");
+//		}
+//		
+//		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+//		String[] rolesArray = roles.toString().split(",");
+//		Arrays.asList(rolesArray).forEach(role -> {
+//			
+//			authorities.add(new SimpleGrantedAuthority(role));
+//		});
+//		
+//		UserDetails userDetails = new User(claims.getSubject(),"",authorities);
+//		
+//		return new UsernamePasswordAuthenticationToken(userDetails,"",authorities);
+//	}
+//	
+//	private Claims parseClaims(String accessToken) {
+//		try {
+//			return Jwts.parserBuilder()
+//					.setSigningKey(key)
+//					.build()
+//					.parseClaimsJws(accessToken)
+//					.getBody();
+//		}catch (ExpiredJwtException e) {
+//			return e.getClaims();
+//		}
+//		
+//	}
+	
+
 }

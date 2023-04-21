@@ -4,7 +4,7 @@ import javax.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,9 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.toyproject.bookmanagement.aop.annotation.ValidAspect;
 import com.toyproject.bookmanagement.dto.auth.LoginReqDto;
 import com.toyproject.bookmanagement.dto.auth.SignupReqDto;
-import com.toyproject.bookmanagement.dto.response.DataResponseDto;
 import com.toyproject.bookmanagement.service.AuthenticationService;
-
 
 import lombok.RequiredArgsConstructor;
 
@@ -29,7 +27,7 @@ public class AuthenticationController  {
 	@ValidAspect
 	@PostMapping("/login")
 	public ResponseEntity<?> login(@Valid @RequestBody LoginReqDto loginReqDto, BindingResult bindingResult) {
-		return ResponseEntity.ok().body(DataResponseDto.of(authenticationService.signin(loginReqDto)));
+		return ResponseEntity.ok().body(authenticationService.signin(loginReqDto));
 	}
 	
 	
@@ -39,5 +37,12 @@ public class AuthenticationController  {
 		authenticationService.checkDuplicatedEmail(signupReqDto.getEmail());
 		authenticationService.signup(signupReqDto);
 		return ResponseEntity.ok().body(true);
+	}
+	
+	
+	@GetMapping("/authenticated")
+	public ResponseEntity<?> authenticated(String accessToken){
+		
+		return ResponseEntity.ok().body(authenticationService.authenticated(accessToken)); //true, false
 	}
 }

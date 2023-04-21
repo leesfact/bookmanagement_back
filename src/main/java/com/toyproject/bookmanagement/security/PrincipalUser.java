@@ -31,13 +31,13 @@ public class PrincipalUser implements UserDetails {
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
 		
-		List<SimpleGrantedAuthority> authorrities= new ArrayList<>();
+		List<SimpleGrantedAuthority> authorities= new ArrayList<>();
 		
 		this.authorities.forEach(authority -> {
-			authorrities.add(new SimpleGrantedAuthority(authority.getRole().getRoleName()));
+			authorities.add(new SimpleGrantedAuthority(authority.getRole().getRoleName()));
 		});
 		
-		return authorrities;
+		return authorities;
 	}
 
 	@Override
