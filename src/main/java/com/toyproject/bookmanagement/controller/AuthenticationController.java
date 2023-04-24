@@ -45,4 +45,9 @@ public class AuthenticationController  {
 		
 		return ResponseEntity.ok().body(authenticationService.authenticated(accessToken)); //true, false
 	}
+	
+	@GetMapping("/principal")
+	public ResponseEntity<?> principal(String accessToken) {
+		return ResponseEntity.ok().body(authenticationService.getPrincipal(accessToken));
+	}
 }

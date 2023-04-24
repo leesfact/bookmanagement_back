@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.toyproject.bookmanagement.repository.BookRepository">
+	
+	
+	
+	<resultMap type="com.toyproject.bookmanagement.entity.Book" id="BookMap">
+		<id property="bookId" column="book_id"/>
+		<result property="bookName" column="book_name"/>
+		<result property="authorId" column="author_id"/>
+		<result property="publisherId" column="publisher_id"/>
+		<result property="categoryId" column="category_id"/>
+		<result property="coverImgUrl" column="cover_img_url"/>
+		<association property="author" resultMap="AuthorMap"></association>
+		<association property="publisher" resultMap="PublisherMap"></association>
+		<association property="category" resultMap="CategoryMap"></association>
+	</resultMap>
+	
+	<resultMap type="com.toyproject.bookmanagement.entity.Author" id="AuthorMap">
+		<id property="authorId" column="author_id"/>
+		<result property="authorName" column="author_name"/>
+	</resultMap>
+	
+	<resultMap type="com.toyproject.bookmanagement.entity.Publisher" id="PublisherMap">
+		<id property="publisherId" column="publisher_id"/>
+		<result property="publisherName" column="publisher_name"/>
+	</resultMap>
+	
+	<resultMap type="com.toyproject.bookmanagement.entity.Category" id="CategoryMap">
+		<id property="categoryId" column="category_id"/>
+		<result property="categoryName" column="category_name"/>
+	</resultMap>
+	
+	<select id="searchBooks" parameterType="hashMap" resultMap="BookMap">
+		select 
+			bt.book_id,
+		    bt.book_name,
+		    bt.author_id,
+		    bt.publisher_id,
+		    bt.category_id,
+		    bt.cover_img_url,
+		    
+		    at.author_id,
+		    at.author_name,
+		    
+		    pt.publisher_id,
+		    pt.publisher_name,
+		    
+		    ct.category_id,
+			ct.category_name
+		from 
+			book_tb bt
+		    left outer join author_tb at on (at.author_id = bt.author_id)
+		    left outer join publisher_tb pt on (pt.publisher_id = bt.publisher_id)
+		    left outer join category_tb ct on (ct.category_id = bt.category_id)
+		    
+		order by 
+			bt.book_id
+	
+		limit #{index}, 20;
+	
+	</select>
+	
+	
+</mapper>

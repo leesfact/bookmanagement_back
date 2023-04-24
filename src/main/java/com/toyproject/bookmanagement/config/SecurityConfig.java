@@ -29,7 +29,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 		 http.authorizeRequests()
 		 	 .antMatchers("/auth/**")
 		 	 .permitAll()
-		 	 .anyRequest()
-		 	 .authenticated();
+		 	 .anyRequest();
+//		 	 .authenticated();
 	}
 }
