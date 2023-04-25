@@ -53,12 +53,34 @@
 		    left outer join author_tb at on (at.author_id = bt.author_id)
 		    left outer join publisher_tb pt on (pt.publisher_id = bt.publisher_id)
 		    left outer join category_tb ct on (ct.category_id = bt.category_id)
-		    
+		where
+			ct.category_id in (1,2,3,4,5)
+		  
 		order by 
 			bt.book_id
 	
 		limit #{index}, 20;
 	
+	</select>
+	
+	<select id="getTotalCount" parameterType="hashMap" resultType="Integer">
+		select 
+			count(*)
+		from 
+			book_tb bt
+			left outer join author_tb at on (at.author_id = bt.author_id)
+			left outer join publisher_tb pt on (pt.publisher_id = bt.publisher_id)
+			left outer join category_tb ct on (ct.category_id = bt.category_id)
+		
+	</select>
+	
+	
+	<select id="getCategories" resultMap="CategoryMap">
+		select
+			category_id,
+			category_name
+		from
+			category_tb
 	</select>
 	
 	

@@ -17,8 +17,11 @@ public class BookController {
 	@GetMapping("/books")
 	public ResponseEntity<?> searchBooks(SearchBookReqDto searchBookReqDto){
 		
-		
-		
 		return ResponseEntity.ok().body(bookService.searchBooks(searchBookReqDto));
+	}
+	
+	@GetMapping("/categories")
+	public ResponseEntity<?> categories(){
+		return ResponseEntity.ok().body(bookService.getCategories());
 	}
 }

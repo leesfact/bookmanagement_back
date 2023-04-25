@@ -1,10 +1,12 @@
 package com.toyproject.bookmanagement.dto.book;
 
+import java.util.List;
+
 import lombok.Data;
 
 @Data
 public class SearchBookReqDto {
 	private int page;
 	private String searchValue;
-	private String categoryId;
+	private List<Integer> categoryIds;
 }

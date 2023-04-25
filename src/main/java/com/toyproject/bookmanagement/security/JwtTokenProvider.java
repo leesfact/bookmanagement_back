@@ -1,14 +1,21 @@
 package com.toyproject.bookmanagement.security;
 
 import java.security.Key;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
 import com.toyproject.bookmanagement.dto.auth.JwtRespDto;
+import com.toyproject.bookmanagement.exception.CustomException;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -109,40 +116,30 @@ public class JwtTokenProvider {
 	
 	
 	
-//	public Authentication getAuthentication(String accessToken) {
-//		
-//		Claims claims = parseClaims(accessToken);
-//		
-//		Object roles = claims.get("auth");
-//		
-//		if(roles == null) {
-//			throw new CustomException("권한 정보가 없는 토큰입니다.");
-//		}
-//		
-//		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
-//		String[] rolesArray = roles.toString().split(",");
-//		Arrays.asList(rolesArray).forEach(role -> {
-//			
-//			authorities.add(new SimpleGrantedAuthority(role));
-//		});
-//		
-//		UserDetails userDetails = new User(claims.getSubject(),"",authorities);
-//		
-//		return new UsernamePasswordAuthenticationToken(userDetails,"",authorities);
-//	}
-//	
-//	private Claims parseClaims(String accessToken) {
-//		try {
-//			return Jwts.parserBuilder()
-//					.setSigningKey(key)
-//					.build()
-//					.parseClaimsJws(accessToken)
-//					.getBody();
-//		}catch (ExpiredJwtException e) {
-//			return e.getClaims();
-//		}
-//		
-//	}
+	public Authentication getAuthentication(String accessToken) {
+		
+		Authentication authentication = null;
+		Claims claims = getClaims(accessToken);
+		
+		if(claims.get("auth") == null) {
+			throw new CustomException("AccessToken에 권한 정보가 없습니다.");
+		}
+		
+		List<SimpleGrantedAuthority> authorities = new ArrayList<>();
+		
+		String auth = claims.get("auth").toString();
+		for(String role :auth.split(",")) {
+			authorities.add(new SimpleGrantedAuthority(role));
+		}
+		
+		
+		UserDetails userDetails = new User(claims.getSubject(),"",authorities);
+		
+		authentication = new UsernamePasswordAuthenticationToken(userDetails, null, authorities);
+		
+		return authentication;
+	}
+
 	
 
 }
