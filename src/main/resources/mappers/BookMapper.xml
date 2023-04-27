@@ -155,5 +155,32 @@
 		and user_id = #{userId}
 	</select>
 	
+	<select id="getRentalListByBookId" parameterType="Integer" resultType="com.toyproject.bookmanagement.entity.RentalList" >
+		select
+			blt.book_list_id as bookListId,
+		    bt.book_name as bookName,
+		    brt.user_id as userId
+		from
+			book_list_tb blt
+		    left outer join book_tb bt on(bt.book_id = blt.book_id)
+		    left outer join book_rental_tb brt on(brt.book_list_id = blt.book_list_id)
+	    where
+	    	bt.book_id = #{bookId}
+	</select>
+	
+	
+	<insert id="setLike">
+		insert into book_like_tb
+		values (0, #{bookId}, #{userId})
+	</insert>
+	
+	<insert id="disLike">
+		delete
+		from
+			book_like_tb
+		where
+			book_id = #{bookId}
+		and user_id + #{userId}
+	</insert>
 	
 </mapper>
