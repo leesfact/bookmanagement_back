@@ -180,7 +180,21 @@
 			book_like_tb
 		where
 			book_id = #{bookId}
-		and user_id + #{userId}
+		and user_id = #{userId}
+	</insert>
+	
+	<insert id="rentalBook" parameterType="hashMap">
+		insert into book_rental_tb
+		values (0, #{bookListId}, #{userId})
+	</insert>
+	
+	<insert id="returnBook" parameterType="hashMap">
+		delete
+		from
+			book_rental_tb
+		where
+			book_list_id = #{bookListId}
+		and user_id = #{userId}
 	</insert>
 	
 </mapper>
